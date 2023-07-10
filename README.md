@@ -25,6 +25,7 @@ Common name: `e4a123f8-1f12-11ee-be56-0242ac120002.clients.test.com`
 const app = fastify(/* tls certs */)
 
 app.register(mtlsAuthPlugin, {
+  mtlsClientsRole: 'clients',
   mtlsCommonNameDomain: 'test.com'
 })
 
