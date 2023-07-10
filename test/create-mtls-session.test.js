@@ -3,6 +3,7 @@
 const assert = require('node:assert')
 const { test } = require('node:test')
 const { request } = require('undici')
+const fastify = require('fastify')
 
 const mtlsAuthPlugin = require('..')
 const { createMtlsServer, createMtlsDispatcher } = require('./helper')
@@ -120,4 +121,31 @@ test('should fail if there is a client role without id', async (t) => {
 
   const error = await body.json()
   assert.strictEqual(error.message, 'Missing workspace ID in certificate common name')
+})
+
+test('should fail if it is not a tls connection', async (t) => {
+  const app = fastify()
+
+  app.register(mtlsAuthPlugin, {
+    mtlsClientsRole: 'payments'
+  })
+
+  app.get('/user', async (request) => {
+    await request.createMtlsSession()
+    return request.user
+  })
+
+  const serverOrigin = await app.listen({ port: 0 })
+  t.after(() => app.close())
+
+  const url = serverOrigin + '/user'
+  const { statusCode, body } = await request(url, {
+    method: 'GET',
+    dispatcher: createMtlsDispatcher(serverOrigin, 'payments')
+  })
+
+  assert.strictEqual(statusCode, 500)
+
+  const error = await body.json()
+  assert.strictEqual(error.message, 'Request is not a TLS connection')
 })

@@ -7,6 +7,10 @@ async function plugin (app, options) {
   const commonNameDomain = `.${options.mtlsCommonNameDomain}`
 
   app.decorateRequest('createMtlsSession', async function () {
+    if (typeof this.raw?.socket?.getPeerCertificate !== 'function') {
+      throw new Error('Request is not a TLS connection')
+    }
+
     const certificate = this.raw.socket.getPeerCertificate(false)
     const commonName = certificate.subject.CN
 
