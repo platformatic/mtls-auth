@@ -6,7 +6,7 @@
   "scripts": {
     "test": "standard | snazzy && c8 node --test test"
   },
-  "author": "",
+  "author": "Ivan Tymoshenko <ivan@tymoshenko.me>",
   "license": "Apache-2.0",
   "dependencies": {
     "fastify-plugin": "^4.5.0"
