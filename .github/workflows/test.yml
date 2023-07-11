@@ -1,0 +1,19 @@
+name: Test
+on: [pull_request, workflow_call]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - uses: actions/checkout@v3
+      - name: Install app modules
+        run: npm ci
+
+      - name: Run tests on app
+        run: npm test

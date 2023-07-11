@@ -1,0 +1,22 @@
+{
+  "name": "mtls-auth",
+  "version": "1.0.0",
+  "description": "Plugin for Platformatic cloud mtls auth",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard | snazzy && c8 node --test test"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "fastify-plugin": "^4.5.0"
+  },
+  "devDependencies": {
+    "c8": "^8.0.0",
+    "fastify": "^4.19.2",
+    "snazzy": "^9.0.0",
+    "standard": "^17.1.0",
+    "undici": "^5.22.1",
+    "undici-tls-dispatcher": "^0.2.0"
+  }
+}
