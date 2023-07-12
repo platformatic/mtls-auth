@@ -1,13 +1,21 @@
 {
-  "name": "mtls-auth",
+  "name": "@platformatic/mtls-auth",
   "version": "1.0.0",
   "description": "Plugin for Platformatic cloud mtls auth",
   "main": "index.js",
   "scripts": {
     "test": "standard | snazzy && c8 node --test test"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/platformatic/mtls-auth.git"
+  },
   "author": "Ivan Tymoshenko <ivan@tymoshenko.me>",
   "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/platformatic/mtls-auth/issues"
+  },
+  "homepage": "https://github.com/platformatic/mtls-auth#readme",
   "dependencies": {
     "fastify-plugin": "^4.5.0"
   },
