@@ -16,8 +16,7 @@ test('should create an mtls session', async (t) => {
   })
 
   app.get('/user', async (request) => {
-    await request.createMtlsSession()
-    return request.user
+    return request.getMtlsAuth()
   })
 
   const serverOrigin = await app.listen({ port: 0 })
@@ -45,8 +44,7 @@ test('should fail if common name domain is wrong', async (t) => {
   })
 
   app.get('/user', async (request) => {
-    await request.createMtlsSession()
-    return request.user
+    return request.getMtlsAuth()
   })
 
   const serverOrigin = await app.listen({ port: 0 })
@@ -73,8 +71,7 @@ test('should create client session', async (t) => {
   })
 
   app.get('/user', async (request) => {
-    await request.createMtlsSession()
-    return request.user
+    return request.getMtlsAuth()
   })
 
   const serverOrigin = await app.listen({ port: 0 })
@@ -104,8 +101,7 @@ test('should fail if there is a client role without id', async (t) => {
   })
 
   app.get('/user', async (request) => {
-    await request.createMtlsSession()
-    return request.user
+    return request.getMtlsAuth()
   })
 
   const serverOrigin = await app.listen({ port: 0 })
@@ -131,8 +127,7 @@ test('should fail if it is not a tls connection', async (t) => {
   })
 
   app.get('/user', async (request) => {
-    await request.createMtlsSession()
-    return request.user
+    return request.getMtlsAuth()
   })
 
   const serverOrigin = await app.listen({ port: 0 })

@@ -14,8 +14,8 @@ app.register(mtlsAuthPlugin, {
 })
 
 app.get('/test', async (request) => {
-  await request.createMtlsSession()
-  console.log(request.user['X-PLATFORMATIC-ROLE']) // payments
+  const session = request.getMtlsAuth()
+  console.log(session['X-PLATFORMATIC-ROLE']) // payments
 })
 ```
 
@@ -30,8 +30,8 @@ app.register(mtlsAuthPlugin, {
 })
 
 app.get('/test', async (request) => {
-  await request.createMtlsSession()
-  console.log(request.user['X-PLATFORMATIC-ROLE']) // clients
-  console.log(request.user['X-PLATFORMATIC-WORKSPACE-ID']) // e4a123f8-1f12-11ee-be56-0242ac120002
+  const session = request.getMtlsAuth()
+  console.log(session['X-PLATFORMATIC-ROLE']) // clients
+  console.log(session['X-PLATFORMATIC-WORKSPACE-ID']) // e4a123f8-1f12-11ee-be56-0242ac120002
 })
 ```

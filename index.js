@@ -4,9 +4,11 @@ const fp = require('fastify-plugin')
 
 async function plugin (app, options) {
   const clientsRole = options.mtlsClientsRole ?? null
-  const commonNameDomain = `.${options.mtlsCommonNameDomain}`
+  const mtlsDomain = options.mtlsCommonNameDomain
+    ? `.${options.mtlsCommonNameDomain}`
+    : null
 
-  app.decorateRequest('createMtlsSession', async function () {
+  app.decorateRequest('getMtlsAuth', function () {
     if (typeof this.raw?.socket?.getPeerCertificate !== 'function') {
       throw new Error('Request is not a TLS connection')
     }
@@ -14,28 +16,30 @@ async function plugin (app, options) {
     const certificate = this.raw.socket.getPeerCertificate(false)
     const commonName = certificate.subject.CN
 
-    if (!commonName.endsWith(commonNameDomain)) {
+    if (mtlsDomain && !commonName.endsWith(mtlsDomain)) {
+      app.log.error({ commonName }, 'Invalid certificate common name')
       throw new Error('Invalid certificate common name')
     }
 
-    const domains = commonName.slice(0, -commonNameDomain.length).split('.').reverse()
+    const domains = commonName.slice(0, -mtlsDomain.length).split('.').reverse()
 
     const role = domains[0]
 
     if (clientsRole && role === clientsRole) {
       const workspaceId = domains[1]
       if (workspaceId === undefined) {
+        app.log.error(
+          { commonName, workspaceId },
+          'Missing workspace ID in certificate common name'
+        )
         throw new Error('Missing workspace ID in certificate common name')
       }
-
-      this.user = {
+      return {
         'X-PLATFORMATIC-ROLE': role,
         'X-PLATFORMATIC-WORKSPACE-ID': workspaceId
       }
     } else {
-      this.user = {
-        'X-PLATFORMATIC-ROLE': role
-      }
+      return { 'X-PLATFORMATIC-ROLE': role }
     }
   })
 }
