@@ -10,7 +10,7 @@ Common name: `payments.test.com`
 const app = fastify(/* tls certs */)
 
 app.register(mtlsAuthPlugin, {
-  mtlsCommonNameDomain: 'test.com'
+  mtlsDomain: 'test.com'
 })
 
 app.get('/test', async (request) => {
@@ -26,7 +26,7 @@ const app = fastify(/* tls certs */)
 
 app.register(mtlsAuthPlugin, {
   mtlsClientsRole: 'clients',
-  mtlsCommonNameDomain: 'test.com'
+  mtlsDomain: 'test.com'
 })
 
 app.get('/test', async (request) => {

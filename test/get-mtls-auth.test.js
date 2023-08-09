@@ -12,7 +12,7 @@ test('should create an mtls session', async (t) => {
   const app = createMtlsServer()
 
   app.register(mtlsAuthPlugin, {
-    mtlsCommonNameDomain: 'test.com'
+    mtlsDomain: 'test.com'
   })
 
   app.get('/user', async (request) => {
@@ -40,7 +40,7 @@ test('should fail if common name domain is wrong', async (t) => {
   const app = createMtlsServer()
 
   app.register(mtlsAuthPlugin, {
-    mtlsCommonNameDomain: 'foo.bar.com'
+    mtlsDomain: 'foo.bar.com'
   })
 
   app.get('/user', async (request) => {
@@ -67,7 +67,7 @@ test('should create client session', async (t) => {
 
   app.register(mtlsAuthPlugin, {
     mtlsClientsRole: 'clients',
-    mtlsCommonNameDomain: 'test.com'
+    mtlsDomain: 'test.com'
   })
 
   app.get('/user', async (request) => {
@@ -97,7 +97,7 @@ test('should fail if there is a client role without id', async (t) => {
 
   app.register(mtlsAuthPlugin, {
     mtlsClientsRole: 'clients',
-    mtlsCommonNameDomain: 'test.com'
+    mtlsDomain: 'test.com'
   })
 
   app.get('/user', async (request) => {

@@ -4,9 +4,7 @@ const fp = require('fastify-plugin')
 
 async function plugin (app, options) {
   const clientsRole = options.mtlsClientsRole ?? null
-  const mtlsDomain = options.mtlsCommonNameDomain
-    ? `.${options.mtlsCommonNameDomain}`
-    : null
+  const mtlsDomain = options.mtlsDomain ? `.${options.mtlsDomain}` : null
 
   app.decorateRequest('getMtlsAuth', function () {
     if (typeof this.raw?.socket?.getPeerCertificate !== 'function') {
