@@ -1,6 +1,6 @@
 {
   "name": "@platformatic/mtls-auth",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Plugin for Platformatic cloud mtls auth",
   "main": "index.js",
   "scripts": {
