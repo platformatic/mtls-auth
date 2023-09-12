@@ -2,7 +2,7 @@
 
 const assert = require('node:assert')
 const { test } = require('node:test')
-const { request } = require('undici')
+const { request, Agent } = require('undici')
 const fastify = require('fastify')
 
 const mtlsAuthPlugin = require('..')
@@ -143,4 +143,35 @@ test('should fail if it is not a tls connection', async (t) => {
 
   const error = await body.json()
   assert.strictEqual(error.message, 'Request is not a TLS connection')
+})
+
+test('should extract no client role if no client certificate is present', async (t) => {
+  const app = createMtlsServer()
+
+  app.register(mtlsAuthPlugin, {
+    mtlsClientsRole: 'clients',
+    mtlsDomain: 'test.com'
+  })
+
+  app.get('/user', async (request) => {
+    return request.getMtlsAuth()
+  })
+
+  const serverOrigin = await app.listen({ port: 0 })
+  t.after(() => app.close())
+
+  const url = serverOrigin + '/user'
+
+  const { statusCode, body } = await request(url, {
+    method: 'GET',
+    dispatcher: new Agent({
+      connect: {
+        rejectUnauthorized: false
+      }
+    })
+  })
+
+  const user = await body.json()
+  assert.strictEqual(statusCode, 200)
+  assert.deepStrictEqual(user, {})
 })

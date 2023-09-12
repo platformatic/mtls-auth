@@ -12,11 +12,15 @@ async function plugin (app, options) {
     }
 
     const certificate = this.raw.socket.getPeerCertificate(false)
-    const commonName = certificate.subject.CN
+    const commonName = certificate?.subject?.CN
 
-    if (mtlsDomain && !commonName.endsWith(mtlsDomain)) {
+    if (commonName && mtlsDomain && !commonName.endsWith(mtlsDomain)) {
       app.log.error({ commonName }, 'Invalid certificate common name')
       throw new Error('Invalid certificate common name')
+    }
+
+    if (!commonName) {
+      return {}
     }
 
     const domains = commonName.slice(0, -mtlsDomain.length).split('.').reverse()
